@@ -11,5 +11,4 @@ int main()
         printf("Case %d: %d\n",i,(a+b));
     }
     return 0;
-
 }
