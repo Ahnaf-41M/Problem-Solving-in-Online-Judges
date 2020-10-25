@@ -1,42 +1,41 @@
-#include<bits/stdc++.h>
+#include <iostream>
+
 using namespace std;
 
-int revnum(long n)
+long Reverse(long x)
 {
-    int rem=0;
-    while(n>0)
-            {
-                rem = n%10 + rem*10;
-                n = n/10;
-            }
+	long newX(0);
 
-            return rem;
+	while (x)
+	{
+		newX *= 10;
+		newX += x % 10;
+		x /= 10;
+	}
+
+	return newX;
 }
 
 int main()
 {
-    long t,count = 0,n,rem = 0,p,sum=0,i;
+	int numberOfCases;
 
-    cin>>t;
+	cin >> numberOfCases;
 
-    for(i = 0; i < t; i++)
-    {
-        cin>>n;
-        p = n;
-        rem = 0;
-        count = 0;
-        rem = revnum(n);
+	for (int i = 0; i < numberOfCases; ++i)
+	{
+		long number;
+		cin >> number;
 
-        while(rem!=n)
-        {
-            n+=rem;
-            rem = revnum(n);
-            count++;
-        }
+		long reverseNumber = Reverse(number);
 
-        cout<<count<<" "<<rem<<endl;
-
-
-    }
-    return 0;
+		int count(0);
+		while (reverseNumber != number)
+		{
+			number += reverseNumber;
+			reverseNumber = Reverse(number);
+			++count;
+		}
+		cout << count << " " << number << endl;
+	}
 }
