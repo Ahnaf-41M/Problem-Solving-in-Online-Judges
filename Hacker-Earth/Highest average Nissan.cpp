@@ -47,6 +47,7 @@ int main()
 {
 	IOS
 	ll n, q, i, k, sum = 0;
+	
 	cin >> n;
 	ll a[n + 1], b[n + 2];
 
