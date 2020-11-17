@@ -1,41 +1,66 @@
 #include<bits/stdc++.h>
-
-#define min3(a,b,c) min(a,min(b,c))
-#define max3(a,b,c) max(a,max(b,c))
-#define min4(a,b,c,d) min(min(a,b),min(c,d))
-#define max4(a,b,c,d) max(max(a,b),max(c,d))
-#define count_one(a) __builtin_popcount(a)  // Returns the number of set bits(1) in a number(a). In long long use __builtin_popcountll(a)
-#define parity(i)   __builtin_parity(i)  //even parity 0 and odd parity 1
-#define blz(a)   __builtin_clz(a) //Returns the number of leading zeroes in a number(a)
-#define btz(a)   __builtin_ctz(a) //Returns the number of trailing zeroes in a number(a)
-#define gcd(a,b) __gcd(a,b)
-#define lcm(a,b) (a*(b/gcd(a,b)))
-#define ll long long
-#define pb push_back
-#define PI M_PI
-#define endl "\n"
-#define sc scanf
-#define pf printf
-#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 using namespace std;
+
+int n, m, blk_len, l, r;
+vector<int> V, a;
+
+int getMin()
+{
+	int LB = l / blk_len;
+	int RB = r / blk_len;
+	int mn = INT_MAX;
+
+	if (LB == RB)
+	{
+		for (int i = l; i <= r; i++)
+			mn = min(a[i], mn);
+	}
+	else
+	{
+		for (int i = l; i < blk_len * (LB + 1); i++)
+			mn = min(a[i], mn);
+		for (int i = LB + 1; i < RB; i++)
+			mn = min(V[i], mn);
+		for (int i = blk_len * RB; i <= r; i++)
+			mn = min(a[i], mn);
+	}
+	return mn;
+}
+void pre_process()
+{
+	int i, j = 0, mn = INT_MAX;
+	int len = (n + blk_len - 1) / blk_len;
+	V.assign(len, INT_MAX);
+
+	for (i = 0; i < n; i++)
+	{
+		if (i % blk_len == 0 && i != 0) {
+			V[++j] = a[i];
+		}
+		else
+			V[j] = min(a[i], V[j]);
+
+	}
+}
 int main()
 {
-     IOS
-     int q,n,i,j,x,y;
-     cin>>n;
-     int a[n];
+	ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+	// freopen("input.txt", "r", stdin);
+	// freopen("output.txt", "w", stdout);
 
-     for(i = 0; i < n; i++)
-     {
-          cin>>a[i];
-     }
-     cin>>q;
-     while(q--)
-     {
-          cin>>x>>y;
-          cout<<*min_element(a+x,a+y+1)<<endl;
-     }
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		int x; cin >> x;
+		a.push_back(x);
+	}
+	cin >> m;
 
-     return 0;
+	blk_len = sqrt(n);
+
+	pre_process();
+	while (m--)
+	{
+		cin >> l >> r;
+		cout << getMin() << endl;
+	}
 }
-
