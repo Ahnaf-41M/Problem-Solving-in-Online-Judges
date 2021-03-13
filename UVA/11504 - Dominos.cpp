@@ -23,54 +23,54 @@ vector<int> adj[mx], tps;
 
 void dfs(int nd)
 {
-	vis[nd] = true;
-	for(int ch : adj[nd])
-		if(!vis[ch])
-			dfs(ch);
-	tps.pb(nd);
+   vis[nd] = true;
+   for (int ch : adj[nd])
+      if (!vis[ch])
+         dfs(ch);
+   tps.pb(nd);
 }
 void CLEAR()
 {
-	for (int i = 1; i <= n; i++) {
-		adj[i].clear();
-		vis[i] = false;
-	}
-	tps.clear();
-	ans = 0;
+   for (int i = 1; i <= n; i++) {
+      adj[i].clear();
+      vis[i] = false;
+   }
+   tps.clear();
+   ans = 0;
 }
 int main()
 {
-	IOS
+   IOS
 #ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
+   freopen("input.txt", "r", stdin);
+   freopen("output.txt", "w", stdout);
 #endif
 
-	cin >> t;
+   cin >> t;
 
-	W(t)
-	{
-		cin >> n >> m;
-		int x, y, i;
+   W(t)
+   {
+      cin >> n >> m;
+      int x, y, i;
 
-		W(m)
-		{
-			cin >> x >> y;
-			adj[x].pb(y);
-		}
-		for (i = 1; i <= n; i++)
-			if (!vis[i])
-				dfs(i);
+      W(m)
+      {
+         cin >> x >> y;
+         adj[x].pb(y);
+      }
+      for (i = 1; i <= n; i++)
+         if (!vis[i])
+            dfs(i);
 
-        for(i = 1; i <= n; i++)
-        	vis[i] = false;
-		for (i = tps.size()-1; i >= 0; i--)
-			if (!vis[tps[i]])
-				{
-					dfs(tps[i]);
-					ans++;
-				}
-		cout << ans << endl;
-		CLEAR();
-	}
+      for (i = 1; i <= n; i++)
+         vis[i] = false;
+      for (i = tps.size() - 1; i >= 0; i--)
+         if (!vis[tps[i]])
+         {
+            dfs(tps[i]);
+            ans++;
+         }
+      cout << ans << endl;
+      CLEAR();
+   }
 }
