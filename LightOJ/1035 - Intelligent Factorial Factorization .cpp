@@ -1,76 +1,76 @@
+/*Suppose n = 12. It's divisors are 2,3,4,6,12. Now if we convert the number n
+  into it's divisors bases, we find (12)2 = 1100, (12)3 = 110, (12)4 = 30,
+  (12)6 = 20 and 12(12) = 10. So, we see that for these bases there is at
+  least 1 trailing zero. Because as they are divisors of n, the first number
+  we will get while converting to its divisors base is 0.*/
 #include<bits/stdc++.h>
+#define  MX      205
+#define  ff      first
+#define  ss      second
+#define  pb      push_back
+#define  int     long long
+#define  PII     pair<int,int>
+#define  all(v)  v.begin(),v.end()
 using namespace std;
-#define mx 1000000
-int a[mx];
-vector<int> v;
 
-void sieve()
+int Ok[MX + 5];
+vector<int> primes;
+
+void Sieve()
 {
-    int i,j;
-    a[2]=1;
-    for(i = 3; i <= mx; i+=2)
-        a[i]=1;
-    for(i = 2; i <= sqrt(mx); i++)
-    {
-        if(a[i]==1)
-        {
-            for(j = 2; j*i<=mx; j++)
-            {
-                a[i*j]=0;
-            }
-        }
-
-    }
-    v.push_back(2);
-    for(i = 3; i <= mx; i+=2)
-    {
-        if(a[i]==1)
-        {
-            v.push_back(i);
-        }
-    }
-
+   for (int i = 3; i <= MX; i += 2)
+      Ok[i] = 1;
+   for (int i = 3; i <= MX; i += 2)
+      if (Ok[i])
+         for (int j = i * i; j <= MX; j += i)
+            Ok[j] = 0;
+   primes.pb(2);
+   for (int i = 3; i <= MX; i += 2)
+      if (Ok[i])
+         primes.pb(i);
 }
-int main()
+void Factorize(int n, map<int, int> &mp)
 {
-    sieve();
-    int n,t,i,j,k,x,l;
-    set<int> s;
-    set<int>::iterator it;
-    scanf("%d",&t);
-    for(i = 1; i <= t; i++)
-    {
-        scanf("%d",&n);
-        int a1[n+2];
-        //x = n;
-        memset(a1,0,sizeof(a1));
-        for(j = 2; j <= n; j++)
-        {
-            x = j;
-            for(k = 0; k < j; k++)
-            {
-                if(x<2)
-                    break;
-                while(x%v[k]==0)
-                {
-                    x/=v[k];
-                    a1[v[k]]++;
-                    s.insert(v[k]);
-                }
-            }
-        }
-        cout<<"Case "<<i<<": "<<n<<" = ";
-        l = s.size();
-        k=0;
-        for(it=s.begin(); it!=s.end(); it++)
-        {
-            k++;
-            if(k!=l)
-                cout<<*it<<" ("<<a1[*it]<<") * ";
-            else
-                cout<<*it<<" ("<<a1[*it]<<")\n";
-        }
-        s.clear();
+   int i = 0;
+   while (i < primes.size() && primes[i]*primes[i] <= n) {
+      int cnt = 0;
+      while (n % primes[i] == 0)
+         n /= primes[i], mp[primes[i]]++;
+      i++;
+   }
+   if (n > 1)
+      mp[n]++;
+}
+signed main()
+{
+   ios::sync_with_stdio(false);
+   cin.tie(NULL);
+   cout.tie(NULL);
 
-    }
+   Sieve();
+   int t;
+   cin >> t;
+
+   for (int k = 1; k <= t; k++) {
+      int n, i = 0, n2;
+      map<int, int> divCnt;
+
+      cin >> n;
+
+      for (int j = 2; j <= n; j++)
+         Factorize(j, divCnt);
+
+      cout << "Case " << k << ": " << n << " = ";
+
+      for (auto it = divCnt.begin(); it != divCnt.end(); it++) {
+         auto it2 = it;
+         it2++;
+         cout << it->ff << " (" << it->ss << ")";
+         if (it2 != divCnt.end())
+            cout << " * ";
+      }
+      cout << endl;
+   }
+
+   return 0;
 }
