@@ -1,8 +1,3 @@
-/*Suppose n = 12. It's divisors are 2,3,4,6,12. Now if we convert the number n
-  into it's divisors bases, we find (12)2 = 1100, (12)3 = 110, (12)4 = 30,
-  (12)6 = 20 and 12(12) = 10. So, we see that for these bases there is at
-  least 1 trailing zero. Because as they are divisors of n, the first number
-  we will get while converting to its divisors base is 0.*/
 #include<bits/stdc++.h>
 #define  MX      205
 #define  ff      first
