@@ -1,63 +1,60 @@
-
-#include <bits/stdc++.h>
-#define ll long long
-#define pb push_back
-#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#include<bits/stdc++.h>
+#define  MX      100005
+#define  ff      first
+#define  ss      second
+#define  pb      push_back
+#define  int     long long
+#define  PII     pair<int,int>
+#define  all(v)  v.begin(),v.end()
 using namespace std;
-int n;
-int zeroes(int n)
+
+int n, m;
+
+int trail_zeroes(int x)
 {
-     int ret=0;
-     while(n)
-     {
-          n/=5;
-          ret+=n;
-     }
-     return ret;
+   int cnt = 0;
+   while (x) {
+      cnt += x / 5;
+      x /= 5;
+   }
+   return cnt;
 }
-int find_zero(int start,int endd)
+int BSearch()
 {
-     int mid,cnt=0;
-     mid = (start+endd)/2;
-     if(start>endd)
-          return -1;
+   int low = 5, high = m, res = -1;
 
-     cnt = zeroes(mid);
-
-     if(cnt==n)
-     {
-          while(zeroes(mid)==n)
-          {
-               mid--;
-          }
-          return ++mid;
-     }
-     if(cnt<n)
-     {
-          return find_zero(mid+1,endd);
-     }
-     if(cnt>n)
-     {
-          return find_zero(start,mid-1);
-     }
+   while (low <= high) {
+      int mid = (low + high) / 2;
+      int tot_0 = trail_zeroes(mid);
+      if (tot_0 == n)
+         res = mid;
+      if (tot_0 >= n)
+         high = mid - 1;
+      else
+         low = mid + 1;
+   }
+   return res;
 }
-
-int main()
+signed main()
 {
-    IOS
-    int t,ans,i;
+   ios::sync_with_stdio(0);
+   cin.tie(0);
+   cout.tie(0);
 
-    cin>>t;
-    for(i = 1; i <= t; i++)
-    {
-         cin>>n;
-         ans = find_zero(1,INT_MAX);
-         if(ans!=-1)
-         {
-              printf("Case %d: %d\n",i,ans);
-         }
-         else
-          printf("Case %d: impossible\n",i);
-    }
-    return 0;
+   int t;
+   cin >> t;
+
+   for (int k = 1; k <= t; k++) {
+      cin >> n;
+      m = n * 5;
+      int ans = BSearch();
+
+      cout << "Case " << k << ": ";
+      if (ans == -1)
+         cout << "impossible\n";
+      else
+         cout << ans << "\n";
+   }
+
+   return 0;
 }
