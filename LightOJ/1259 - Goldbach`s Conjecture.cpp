@@ -1,42 +1,52 @@
-#include <stdio.h>
-#include <stdio.h>
-#include <math.h>
-#include <vector>
+#include<bits/stdc++.h>
+#define  MX      10000005
+#define  ff      first
+#define  ss      second
+#define  pb      push_back
+#define  int     long long
+#define  PII     pair<int,int>
+#define  all(v)  v.begin(),v.end()
 using namespace std;
-#define MAX 10000000+5
-vector <int> prime;
-bool check[MAX+10];
-int main()
+
+bitset < MX + 5 > isPrime;
+vector<int> primes;
+void Sieve()
 {
-    int i,j,k=1,kase,t,n;
-    check[0]=check[1]=1;
-    check[2]=0;
-    prime.push_back(2);
-    for(i=4;i<MAX;i+=2)
-    check[i]=1;
-    for(i=3; i*i<MAX; i+=2)
-    {
-        if(check[i]) continue;
-        for(j=3; j*i<MAX; j+=2) check[i*j]=1;
-    }
-    for(i=3;i<MAX;i+=2)
-      if(!check[i])
-      prime.push_back(i);
-    scanf("%d",&t);
-    for(kase=1; kase<=t; kase++)
-    {
-        int count=0;
-        scanf("%d",&n);
-        for(i=0; prime[i]<=n/2; i++)
-        {
-            if(!check[n-prime[i]])
-            {
-                count++;
+   for (int i = 3; i <= MX; i += 2)
+      isPrime[i] = 1;
+   isPrime[2] = 1;
+   for (int i = 3; i*i <= MX; i += 2)
+      if (isPrime[i])
+         for (int j = i * i; j <= MX; j += i)
+            isPrime[j] = 0;
+   primes.pb(2);
+   for (int i = 3; i <= MX; i += 2)
+      if (isPrime[i])
+         primes.pb(i);
+}
+signed main()
+{
+   //ios::sync_with_stdio(0);
+   //cin.tie(0);
+   //cout.tie(0);
 
-            }
+   Sieve();
+   int t;
+   scanf("%lld", &t);
 
-        }
-        printf("Case %d: %d\n",kase,count);
+   for (int k = 1; k <= t; k++) {
+      int n;
 
-    }
+      scanf("%lld", &n);
+
+      int ans = 0;
+      for (int x : primes) {
+         if (x > n / 2)
+            break;
+         if (isPrime[n - x]) 
+            ans++;
+      }
+      printf("Case %lld: %d\n", k, ans);
+   }
+   return 0;
 }
