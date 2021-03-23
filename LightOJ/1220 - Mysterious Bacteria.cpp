@@ -59,13 +59,12 @@ int main()
       scanf("%lld", &x);
       ll p = Fact(abs(x));
       if (x < 0) {
-         if (p & 1)
-            printf("Case %d: %lld\n", k, p);
-         else {
-            while ( p % 2 == 0 )
-               p /= 2;
-            printf("Case %d: %lld\n", k, p);
-         }
+         /*If x is a negetive number and x = a^p, then p must be
+           odd.(i.e. x = -16,then p = 1,as,(-2)^4 =(-4)^2= 16.
+           Only, (-16)^1 = -16. Thus p = 1.*/
+         while ( p % 2 == 0 )
+            p /= 2;
+         printf("Case %d: %lld\n", k, p);
       }
       else
          printf("Case %d: %lld\n", k, p);
