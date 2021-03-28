@@ -1,79 +1,70 @@
 #include<bits/stdc++.h>
-
-#define pb   push_back
-#define endl "\n"
-#define ll   long long
-
-#define W(t)          while(t--)
-#define rep(i,n)      for(i = 0; i < n; i++)
-#define IOS ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+#define  MX      1005
+#define  ff      first
+#define  ss      second
+#define  pb      push_back
+#define  int     long long
+#define  PII     pair<int,int>
+#define  all(v)  v.begin(),v.end()
 using namespace std;
 
-vector<int> adj[1200];
+vector<int> divs[2 * MX];
+bool done[2 * MX];
+int lev[2 * MX], A, B;
 
-int dis[1110];
-
-bool is_prime(int n)
+void Pre_Cal()
 {
-	for (int j = 2; j <= sqrt(n); j++)
-		if (n % j == 0)
-			return false;
-	return true;
+   for (int i = 4; i <= 2 * MX - 5; i++) {
+      int n = i;
+      for (int j = 2; j * j <= n; j++) {
+         if (n % j == 0) {
+            divs[i].pb(j);
+            while (n % j == 0)
+               n /= j;
+         }
+      }
+      if (n > 1 && n != i)
+         divs[i].pb(n);
+   }
 }
-void initialize()
+void bfs()
 {
-	vector<int> prime;
-	for (int i = 2; i <= 1100; i++)
-		if (is_prime(i))
-			prime.pb(i);
-	for (int i = 1; i <= 1100; i++)
-	{
-		for (int j = 0; j < prime.size(); j++)
-		{
-			if (i % prime[j] == 0 && prime[j] != i)
-				adj[i].pb(prime[j] + i);
-		}
-	}
+   memset(lev, -1, sizeof(lev));
+
+   queue<int> Q;
+   Q.push(A);
+   lev[A] = 0;
+
+   while (!Q.empty()) {
+      int cur = Q.front();
+      Q.pop();
+
+      for (int ch : divs[cur]) {
+         int nxt = ch + cur;
+         if (lev[nxt] == -1 && nxt <= B) {
+            lev[nxt] = lev[cur] + 1;
+            Q.push(nxt);
+         }
+      }
+   }
 }
-void bfs(int st)
+signed main()
 {
-	dis[st] = 0;
+   ios::sync_with_stdio(0);
+   cin.tie(0);
+   cout.tie(0);
 
-	queue<int> Q;
-	Q.push(st);
+   // freopen("input.txt", "r", stdin);
+   // freopen("output.txt", "w", stdout);
+   Pre_Cal();
 
-	while (!Q.empty())
-	{
-		int tp = Q.front();
-		Q.pop();
+   int t; cin >> t;
 
-		for (int ch : adj[tp])
-		{
-			if (dis[ch] == -1)
-			{
-				Q.push(ch);
-				dis[ch] = dis[tp] + 1;
-			}
-		}
-	}
-}
-int main()
-{
-	IOS
-#ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
-#endif
-	initialize();
-	int t; cin >> t;
+   for (int k = 1; k <= t; k++) {
+      cin >> A >> B;
+      bfs();
+      cout << "Case " << k << ": " << lev[B] << "\n";
+   }
 
-	for (int k = 1; k <= t; k++)
-	{
-		memset(dis, -1, sizeof(dis));
-		int st, ed; cin >> st >> ed;
-		bfs(st);
-		cout << "Case " << k << ": " << dis[ed] << endl;
-	}
-
-	return 0;
+   return 0;
 }
