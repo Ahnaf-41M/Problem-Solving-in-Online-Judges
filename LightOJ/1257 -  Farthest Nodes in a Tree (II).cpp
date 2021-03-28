@@ -1,3 +1,7 @@
+/*First, we need to make 2 dfs call to find the end points of the
+  diameter of the tree. From these 2 end points, we need to make 
+  bfs calls for each of these points and calculate dis1[] and dis2[].
+  Then for each node print max(dis1[node],dis2[node]). */
 #include<bits/stdc++.h>
 #define  MX      10005
 #define  ff      first
