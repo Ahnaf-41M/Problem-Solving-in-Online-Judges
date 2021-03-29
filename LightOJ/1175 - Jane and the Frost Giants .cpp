@@ -1,9 +1,9 @@
-/*For every minute we need to find the positions the fires spreads.
-  Then, for every minute we are finding the positions where Jane 
-  can go. Jane can't go to a position where the position is already
-  burning(we are checking that thing in Valid2() function). 
-  Finally, from all the border positions we are finding the minimum
-  one. */
+/*In lev1[][] for every minute we are finding the positions the 
+  fires spreads.Then, in lev2[][] for every minute we are finding 
+  the positions where Jane can go. Jane can't go to a position where 
+  the place is already burning(we are checking that thing in Valid2() 
+  function). Finally, from all the border positions we are finding 
+  the minimum one(if Jane can go there). */
 #include<bits/stdc++.h>
 #define  MX      100005
 #define  ff      first
