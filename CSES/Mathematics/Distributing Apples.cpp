@@ -24,7 +24,7 @@ signed main()
    ios::sync_with_stdio(0);
    cin.tie(0);
    cout.tie(0);
-
+   //Stars and bars technique, (n+m-1)C(m-1)
    int n, m, up = 1, down = 1, k;
    cin >> n >> m;
    n += m - 1;
