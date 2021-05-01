@@ -30,16 +30,16 @@ void QueryUpd(int node, int b, int e, int val)
    if (b == e) {
       tree[node] -= val;
       printf("%lld ", b);
+      return;
    }
-   else {
-      int left = (node << 1);
-      int right = (node << 1) + 1;
-      int mid = (b + e) >> 1;
+   int left = (node << 1);
+   int right = (node << 1) + 1;
+   int mid = (b + e) >> 1;
 
-      if (tree[left] >= val) QueryUpd(left, b, mid, val); 
-      else QueryUpd(right, mid + 1, e, val);
-      tree[node] = max(tree[left], tree[right]);
-   }
+   if (tree[left] >= val) QueryUpd(left, b, mid, val); //we want the first value
+   else QueryUpd(right, mid + 1, e, val);
+   tree[node] = max(tree[left], tree[right]);
+
 }
 signed main()
 {
@@ -55,7 +55,7 @@ signed main()
 
    for (int i = 1; i <= m; i++) {
       int cur = group[i];
-      if (tree[1] < cur) printf("0 ");  //if there is no hotel with rooms group[i]
+      if (tree[1] < cur) printf("0 ");  //if there is no hotel with rooms >= group[i]
       else QueryUpd(1, 1, n, cur);
    }
    return 0;
