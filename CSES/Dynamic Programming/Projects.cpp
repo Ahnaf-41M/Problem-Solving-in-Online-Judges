@@ -13,7 +13,7 @@ using namespace std;
 
 int dp[MX], n;
 vector<PII> v;
-
+//dp[x] = maximum amount of money we can earn before day x
 int call(int pos)
 {
    if (pos >= n) return 0;
