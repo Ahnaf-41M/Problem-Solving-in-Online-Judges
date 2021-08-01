@@ -1,3 +1,4 @@
+//Almost same problem --> LightOJ 1098 - A New Function
 #include "bits/stdc++.h"
 #define  ff           first
 #define  ss           second
