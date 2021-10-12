@@ -1,7 +1,7 @@
 #include "bits/stdc++.h"
 #define  ff           first
 #define  ss           second
-#define  MX           100005
+#define  MX           150000
 #define  pb           push_back
 #define  int          long long
 #define  PII          pair<int,int>
@@ -41,6 +41,7 @@ void Solve(int tc)
       if (call(1, val))
          ans.pb(val);
    }
+   // cout << sum << "\n";
    cout << ans.size() << "\n";
    for (int x : ans) cout << x << " ";
 
@@ -50,7 +51,6 @@ signed main()
 {
    ios_base::sync_with_stdio(0);
    cin.tie(0);
-   cout.tie(0);
 
    int T = 1;
    //cin >> T;
