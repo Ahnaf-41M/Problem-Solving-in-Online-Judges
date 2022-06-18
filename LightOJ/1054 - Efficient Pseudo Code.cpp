@@ -1,110 +1,96 @@
-#include <bits/stdc++.h>
-#include <ext/rope>
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-
-#define  ff      first
-#define  ss      second
-#define  pb      push_back
-#define  ll      long long
-#define  MX      300005
-#define  inf     1000000
-#define  mod     1000000007
-#define  endl    "\n"
-
-#define  W(t)            while(t--)
-#define  gcd(a,b)        __gcd(a,b)
-#define  lcm(a,b)        (a*(b/gcd(a,b)))
-#define  all(v)          v.begin(),v.end()`
-#define  ZERO(a)         memset(a,0,sizeof(a))
-#define  MINUS(a)        memset(a,-1,sizeof(a))
-#define  rep(i,a,b)      for(i = a; i < b; i++)
-#define  IOS             ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+#include "bits/stdc++.h"
+#define  ff           first
+#define  ss           second
+#define  MX           100005
+#define  pb           push_back
+#define  int          long long
+#define  PII          pair<int,int>
+#define  endl         "\n"
+#define  all(v)       v.begin(),v.end()
+#define  rep(i,a,b)   for(int i = a; i <= b; i++)
+#define  irep(i,b,a)  for(int i = b; i >= a; i--)
 using namespace std;
-using namespace __gnu_cxx;
-using namespace __gnu_pbds;
-template <typename T>  using ordered_set =
-   tree<T, null_type, less<T>,
-   rb_tree_tag, tree_order_statistics_node_update>;
 
-bool is_prime[MX + 5];
-vector<ll> primes;
-ll n, m;
-inline void sieve()
+bool OK[MX];
+vector<int> v;
+int mod = 1e9 + 7;
+void Sieve()
 {
-	for (ll i = 3; i <= MX; i += 2)
-		is_prime[i] = true;
-	for (ll i = 3; i <= sqrt(MX); i += 2)
-		if (is_prime[i])
-			for (ll j =  i * 2; j <= MX; j += i)
-				is_prime[j] = false;
-	primes.pb(2);
-	for (ll i = 3; i <= MX; i += 2)
-		if (is_prime[i])
-			primes.pb(i);
+	for (int i = 3; i < MX; i += 2)
+		OK[i] = 1;
+	for (int i = 3; i * i < MX; i += 2)
+		if (OK[i])
+			for (int j = i * i; j < MX; j += i)
+				OK[j] = 0;
+	v.pb(2);
+	for (int i = 3; i < MX; i += 2)
+		if (OK[i])
+			v.pb(i);
 }
-//Calculating (a^n) % mod
-ll BigMod(ll a, ll n)
+int BigMod(int a, int p)
 {
-	ll x = 1, y = a;
-
-	while (n)
-	{
-		if (n & 1)
-			x = (x * y) % mod;
-		y = (y * y) % mod;
-		n /= 2;
+	int res = 1;
+	while (p) {
+		if (p & 1) res = (res * a) % mod;
+		a = (a * a) % mod;
+		p >>= 1;
 	}
-	return x;
+	return res;
 }
-ll InverseMod(ll a, ll m)
+int Inverse_Mod(int a, int p)
 {
-	return BigMod(a, m);
+	return BigMod(a, p);
 }
-ll SOD(ll X)
+int SOD(int n, int m)
 {
-	ll sum = 1;
-   ll rt = sqrt(X);
-	for (ll i = 0; i < primes.size() && primes[i] <= rt; i++)
-	{
-		if ( X % primes[i] == 0 ) {
-			ll cnt = 0;
+	int ans = 1;
+	for (int x : v) {
+		if (x * x > n) break;
+		if (n % x == 0) {
+			int POW = 0;
+			while (n % x == 0)
+				POW++, n /= x;
+			POW = POW * m + 1;
 
-			while ( X % primes[i] == 0 ) {
-				cnt++;
-				X /= primes[i];
-			}
-			ll tot_pow = cnt * m + 1; /* finding the total number of terms of prime[i] in n^m */
-			/*Sum of n terms = a*(r^n-1)/(r-1). */
-			ll lob = (BigMod(primes[i], tot_pow) - 1) % mod; //a*(r^n-1)
-			ll hor = InverseMod(primes[i] - 1, mod - 2);         //(r-1)
-			sum = (sum * (lob % mod * hor % mod) % mod) % mod;
+			/* finding the total number of terms of x in n^m */
+			/* Sum of n terms = a*(r^n-1)/(r-1). Here, r = x.*/
+
+			int lob = (BigMod(x, POW) - 1) % mod; //a*(r^n-1)
+			int hor = Inverse_Mod(x - 1, mod - 2) % mod; // 1/(r-1)
+			ans = (ans * ((lob * hor) % mod)) % mod;
 		}
 	}
-	if ( X > 1 ) {
-		if ( X == mod ) //if X == 1000000007
-			sum = 1;
+	if (n > 1) {
+		if (n == mod) ans = 1; //if n == 1000000007
 		else {
-			ll tot_pow = m + 1; /* finding the total number of terms of X in n^m */
-			//a*(r^n-1),a = primes[i],thats why we added 1 to tot_pow
-			ll lob = (BigMod(X, tot_pow) - 1) % mod; 
-			ll hor = InverseMod(X - 1, mod - 2);   //(r-1)
-			sum = (sum * (lob % mod * hor % mod) % mod) % mod;
+			int POW = m + 1;
+			int lob = (BigMod(n, POW) - 1) % mod; // a*(r^n-1)
+			int hor = Inverse_Mod(n - 1, mod - 2) % mod; // 1/(r-1)
+			ans = (ans * ((lob * hor) % mod)) % mod;
 		}
 	}
-	return sum;
+	return ans;
 }
-int main()
+void Solve(int tc)
 {
-	sieve();
-	ll t;
+	/*Sum of divisors = (1 + p1 + p1^2 ... p1^a1) * (1 + p2 + p2^2 ... p2^a2) *.................
+	  ....................*(1 + pk + pk^2 ... pk^ak) */
+	int n, m;
+	cin >> n >> m;
+	cout << "Case " << tc << ": " << SOD(n, m) << "\n";
+}
+signed main()
+{
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
 
-	scanf("%lld", &t);
-	for (ll k = 1; k <= t; k++)
-	{
-		scanf("%lld%lld", &n, &m);
-		ll ans = SOD(n);
-		printf("Case %lld: %lld\n", k, ans % mod);
+	Sieve();
+	int T = 1;
+	cin >> T;
+
+	for (int tc = 1; tc <= T; tc++) {
+		Solve(tc);
 	}
 
+	return 0;
 }
