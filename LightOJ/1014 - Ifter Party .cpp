@@ -1,64 +1,50 @@
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
+#define  ff           first
+#define  ss           second
+#define  MX           100005
+#define  pb           push_back
+#define  int          long long
+#define  PII          pair<int,int>
+#define  endl         "\n"
+#define  all(v)       v.begin(),v.end()
+#define  rep(i,a,b)   for(int i = a; i <= b; i++)
+#define  irep(i,b,a)  for(int i = b; i >= a; i--)
 using namespace std;
-#define ll long long
 
-int main()
+void Solve(int tc)
 {
-	int t;
-	ll p,q,l,i;
+	int P, L, Q;
+	set<int> ans;
 
-	cin >> t;
+	cin >> P >> L;
+	P -= L;
 
-	for (int j = 1; j <= t; j++) {
-		scanf("%lld", &p);
-		scanf("%lld", &l);
-		p = p - l;
-		vector <ll> a;
-		vector <ll> b;
-
-
-		for (i = 1; i * i < p; i++) {
-			if(p % i == 0) {
-				if(i > l) {
-					a.push_back(i);
-				}
-
-				if((p / i) > l) {
-					b.push_back(p / i);
-				}
-			}
-
+	for (int i = 1; i * i <= P; i++) {
+		if (P % i == 0) {
+			int d1 = i, d2 = P / i;
+			if (d1 > L) ans.insert(d1);
+			if (d1 != d2 && d2 > L) ans.insert(d2);
 		}
+	}
+	cout << "Case " << tc << ": ";
+	if (ans.empty()) cout << "impossible\n";
+	else {
+		for (int x : ans)
+			cout << x << " ";
+		cout << "\n";
+	}
+}
+signed main()
+{
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
 
-		if(i * i == p and i > l) {
-			a.push_back(i);
-		}
+	int T = 1;
+	cin >> T;
 
-		printf("Case %d: ", j);
-
-		for (int i = 0; i < a.size(); i++) {
-			printf("%lld", a[i]);
-			if(!(i == a.size() - 1 and b.size() == 0)) {
-				printf(" ");
-			}
-		}
-
-		for (int i = b.size() - 1; i >= 0; i--) {
-			printf("%lld", b[i]);
-			if(i != 0) {
-				printf(" ");
-			}
-		}
-
-		if(a.size() + b.size()) {
-			printf("\n");
-		}
-
-		else {
-			printf("impossible\n");
-		}
-
+	for (int tc = 1; tc <= T; tc++) {
+		Solve(tc);
 	}
 
-
+	return 0;
 }
