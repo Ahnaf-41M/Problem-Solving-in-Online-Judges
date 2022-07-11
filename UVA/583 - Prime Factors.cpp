@@ -1,70 +1,69 @@
-#include <cstdio>
-#include <vector>
-
+#include "bits/stdc++.h"
+#define  ff           first
+#define  ss           second
+#define  MX           100005
+#define  pb           push_back
+#define  int          long long
+#define  PII          pair<int,int>
+#define  endl         "\n"
+#define  all(v)       v.begin(),v.end()
+#define  rep(i,a,b)   for(int i = a; i <= b; i++)
+#define  irep(i,b,a)  for(int i = b; i >= a; i--)
 using namespace std;
 
-int main()
+bool prime[MX];
+vector<int> v;
+
+void Sieve()
 {
-    vector<int> primes(4792);
-    vector<bool> isPrime(46340, true);
+    for (int i = 3; i < MX; i += 2)
+        prime[i] = 1;
+    for (int i = 3; i * i < MX; i += 2)
+        if (prime[i])
+            for (int j = i * i; j < MX; j += i)
+                prime[j] = 0;
+    v.pb(2);
+    for (int i = 3; i < MX; i += 2)
+        if (prime[i])
+            v.pb(i);
+}
+vector<int> Factorize(int n)
+{
+    vector<int> ans;
+    if (n < 0) ans.pb(-1);
+    n = abs(n);
+    for (int x : v) {
+        if (x * x > n) break;
+        while (n % x == 0)
+            n /= x, ans.pb(x);
+    }
+    if (n > 1) ans.pb(n);
+    return ans;
+}
+void Solve(int tc)
+{
+    int n;
+    while (cin >> n && n) {
+        vector<int> ans = Factorize(n);
 
-    primes[0] = 2;
-    int pos(1);
+        cout << n << " = " << ans[0];
+        for (int i = 1; i < (int)ans.size(); i++)
+            cout << " x " << ans[i];
+        cout << "\n";
+    }
+}
+signed main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
 
-    for (long long i = 3; i < 46340; i += 2)
-    {
-        if (isPrime[i])
-        {
-            for (long long j = i * i; j < 46340; j += i)
-            {
-                isPrime[j] = false;
-            }
+    Sieve();
+    int T = 1;
+    //cin >> T;
 
-            primes[pos] = i;
-            ++pos;
-        }
+    for (int tc = 1; tc <= T; tc++) {
+        Solve(tc);
     }
 
-    int num;
-    while (scanf("%d", &num), num != 0)
-    {
-        printf("%d =", num);
-
-        bool anotherOccurance(false);
-
-
-        if (num < 0)
-        {
-            num *= -1;
-            printf(" -1");
-            anotherOccurance = true;
-        }
-
-        else if (num == 1)
-            printf(" 1");
-
-        for (int pos = 0; primes[pos] * primes[pos] <= num && pos < 4792; ++pos)
-        {
-            while (num % primes[pos] == 0)
-            {
-                if (anotherOccurance)
-                    printf(" x %d", primes[pos]);
-                else
-                    printf(" %d", primes[pos]);
-
-                anotherOccurance = true;
-                num /= primes[pos];
-            }
-        }
-
-        if (num > 1)
-        {
-            if (anotherOccurance)
-                printf(" x %d", num);
-            else
-                printf(" %d", num);
-        }
-
-        printf("\n");
-    }
+    return 0;
 }
