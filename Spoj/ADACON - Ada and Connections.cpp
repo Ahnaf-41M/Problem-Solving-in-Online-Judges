@@ -1,65 +1,83 @@
-#include<bits/stdc++.h>
+#include "bits/stdc++.h"
+#define  ff           first
+#define  ss           second
+#define  MX           1000005
+#define  pb           push_back
+#define  int          long long
+#define  PII          pair<int,int>
+#define  endl         "\n"
+#define  all(v)       v.begin(),v.end()
+#define  rep(i,a,b)   for(int i = a; i <= b; i++)
+#define  irep(i,b,a)  for(int i = b; i >= a; i--)
 using namespace std;
-///Got TLE -_-
 
-#define ll long long
-vector<ll> v;
-
-void find_primes(ll mx)
+int nxt[MX], cnt[MX];
+int n;
+void Sieve()
 {
-     ll i,j;
-     ll a1[mx];
-     memset(a1,0,sizeof(a1));
-     a1[1]=1;
-
-     for(i = 3; i <= sqrt(mx); i++)
-     {
-          if(a1[i]==0)
-          {
-               for(j = 2; i*j <= mx; j++)
-               {
-                    a1[i*j]=1;
-               }
-          }
-     }
-     v.push_back(2);
-     for(i = 3; i <= mx; i+=2)
-     {
-          if(a1[i]==0)
-               v.push_back(i);
-     }
+	nxt[2] = 2;
+	for (int i = 2; i < MX; i++)
+		nxt[i] = i;
+	for (int i = 2; i < MX; i++) {
+		if (nxt[i] == i) {
+			for (int j = i * i; j < MX; j += i) {
+				if (nxt[j] == j)
+					nxt[j] = i;
+			}
+		}
+	}
 }
-int main()
+bool cmp(int x, int y)
 {
-     ll i,j,n,mxe=0;
-     cin>>n;
-     ll a[n];
-     ll sum[n];
-     for(i = 0; i < n; i++)
-     {
-          cin>>a[i];
-          sum[i]=0;
-          if(a[i]>=mxe)
-               mxe=a[i];
-     }
+	if (cnt[x] > cnt[y]) return true;
+	if (cnt[x] == cnt[y]) return x < y;
+	return false;
+}
+void Solve(int tc)
+{
+	int zero = 0, one = 0;
 
-     find_primes(mxe/2+1);
-     ll k= 0;
+	cin >> n;
 
-     for(i = 0; i < v.size(); i++)
-     {
-          for(j = 0; j < n; j++)
-          {
-               if(a[j]%v[i]!=0)
-               {
-                    sum[k]++;
-                    if(a[j]-(a[j]%v[i])>1&&(a[j]-(a[j]%v[i])<(a[j]-1)))
-                       sum[k]=INT_MAX;
-               }
+	vector<int> ar(n), primes;
+	rep(i, 0, n - 1) {
+		cin >> ar[i];
+		zero += (!ar[i]), one += (ar[i] == 1);
+		int x = ar[i];
+		while (nxt[x] > 1) {
+			int d = nxt[x];
+			if (!cnt[d]) primes.pb(d);
+			cnt[d]++;
+			while (x % d == 0) x /= d;
+		}
+	}
+	if (primes.empty()) {
+		if (one) cout << one << "\n";
+		else cout << 2 << "\n";
+		return;
+	}
+	sort(all(primes), cmp);
 
-          }
-          k++;
-     }
-     ll mn = *min_element(sum,sum+k);
-     cout<<mn<<endl;
+	int r1 = 0, r2 = 0, r3 = 0;
+	for (int x : ar) {
+		r1 += (x % 2);
+		r2 += min(x % primes[0], primes[0] - (x % primes[0]));
+		r3 += min(x % 3, 3 - (x % 3));
+	}
+	cout << min({r1, r2, r3}) << "\n";
+}
+signed main()
+{
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+
+	Sieve();
+	int T = 1;
+	//cin >> T;
+
+	for (int tc = 1; tc <= T; tc++) {
+		Solve(tc);
+	}
+
+	return 0;
 }
